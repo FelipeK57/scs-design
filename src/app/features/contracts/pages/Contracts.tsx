@@ -15,98 +15,121 @@ import {
 import { ListFilter, PlusIcon, SearchIcon } from "lucide-react";
 import { Link, useNavigate } from "react-router";
 
-const mockVisits = [
+const mockContracts = [
   {
     id: 1,
-    type: "Inspección",
+    contractNumber: "CNT-2024-001",
     client: "Empresa A",
-    responsible: "Juan Pérez",
-    date: "2024-06-15",
-    status: "Completada",
+    startDate: "2024-01-15",
+    endDate: "2025-01-15",
+    amount: "$50,000",
+    status: "Activo",
   },
   {
     id: 2,
-    type: "Mantenimiento",
+    contractNumber: "CNT-2024-002",
     client: "Empresa B",
-    responsible: "María Gómez",
-    date: "2024-06-20",
-    status: "Pendiente",
+    startDate: "2024-03-20",
+    endDate: "2024-12-20",
+    amount: "$35,000",
+    status: "Activo",
   },
   {
     id: 3,
-    type: "Instalación",
+    contractNumber: "CNT-2024-003",
     client: "Empresa C",
-    responsible: "Carlos López",
-    date: "2024-06-25",
-    status: "En Progreso",
+    startDate: "2023-06-01",
+    endDate: "2024-06-01",
+    amount: "$60,000",
+    status: "Expirado",
   },
   {
     id: 4,
-    type: "Inspección",
+    contractNumber: "CNT-2024-004",
     client: "Empresa D",
-    responsible: "Ana Martínez",
-    date: "2024-06-30",
-    status: "Completada",
+    startDate: "2024-05-10",
+    endDate: "2025-05-10",
+    amount: "$45,000",
+    status: "Activo",
   },
   {
     id: 5,
-    type: "Mantenimiento",
+    contractNumber: "CNT-2024-005",
     client: "Empresa E",
-    responsible: "Luis Rodríguez",
-    date: "2024-07-05",
-    status: "Pendiente",
+    startDate: "2024-07-01",
+    endDate: "2024-12-31",
+    amount: "$28,000",
+    status: "Por Vencer",
   },
   {
     id: 6,
-    type: "Inspección",
+    contractNumber: "CNT-2024-006",
     client: "Empresa A",
-    responsible: "Juan Pérez",
-    date: "2024-06-15",
-    status: "Completada",
+    startDate: "2024-02-15",
+    endDate: "2025-02-15",
+    amount: "$55,000",
+    status: "Activo",
   },
   {
     id: 7,
-    type: "Mantenimiento",
+    contractNumber: "CNT-2024-007",
     client: "Empresa B",
-    responsible: "María Gómez",
-    date: "2024-06-20",
-    status: "Pendiente",
+    startDate: "2024-04-20",
+    endDate: "2025-04-20",
+    amount: "$40,000",
+    status: "Activo",
   },
   {
     id: 8,
-    type: "Instalación",
+    contractNumber: "CNT-2024-008",
     client: "Empresa C",
-    responsible: "Carlos López",
-    date: "2024-06-25",
-    status: "En Progreso",
+    startDate: "2023-08-01",
+    endDate: "2024-08-01",
+    amount: "$65,000",
+    status: "Expirado",
   },
   {
     id: 9,
-    type: "Inspección",
+    contractNumber: "CNT-2024-009",
     client: "Empresa D",
-    responsible: "Ana Martínez",
-    date: "2024-06-30",
-    status: "Completada",
+    startDate: "2024-06-10",
+    endDate: "2026-06-10",
+    amount: "$50,000",
+    status: "Activo",
   },
   {
     id: 10,
-    type: "Mantenimiento",
+    contractNumber: "CNT-2024-010",
     client: "Empresa E",
-    responsible: "Luis Rodríguez",
-    date: "2024-07-05",
-    status: "Pendiente",
+    startDate: "2024-08-01",
+    endDate: "2025-01-31",
+    amount: "$32,000",
+    status: "Por Vencer",
   },
 ];
 
-export const Visits = () => {
+const getStatusColor = (status: string) => {
+  switch (status) {
+    case "Activo":
+      return "success";
+    case "Por Vencer":
+      return "warning";
+    case "Expirado":
+      return "danger";
+    default:
+      return "default";
+  }
+};
+
+export const Contracts = () => {
   const navigate = useNavigate();
 
   return (
     <main className="flex flex-col gap-4 w-full">
-      <h1 className="text-xl font-semibold">Visitas</h1>
+      <h1 className="text-xl font-semibold">Contratos</h1>
 
       <Table
-        aria-label="Visitas table"
+        aria-label="Contratos table"
         selectionMode="single"
         removeWrapper
         topContent={
@@ -115,7 +138,7 @@ export const Visits = () => {
               className="max-w-xs"
               variant="bordered"
               isClearable
-              placeholder="Buscar visitas..."
+              placeholder="Buscar contratos..."
               startContent={<SearchIcon className="size-4 text-divider" />}
               onClear={() => {}}
             />
@@ -129,12 +152,12 @@ export const Visits = () => {
               </Button>
               <Button
                 as={Link}
-                to="/visits/new"
+                to="/contracts/new"
                 color="primary"
                 className="min-w-fit"
                 startContent={<PlusIcon className="size-4" />}
               >
-                Crear Visita
+                Crear Contrato
               </Button>
             </article>
           </article>
@@ -170,30 +193,34 @@ export const Visits = () => {
         }
       >
         <TableHeader>
-          <TableColumn>OT</TableColumn>
-          <TableColumn>TIPO</TableColumn>
+          <TableColumn>NÚMERO CONTRATO</TableColumn>
           <TableColumn>CLIENTE</TableColumn>
-          <TableColumn>RESPONSABLE</TableColumn>
+          <TableColumn>FECHA INICIO</TableColumn>
+          <TableColumn>FECHA FIN</TableColumn>
+          <TableColumn>MONTO</TableColumn>
           <TableColumn>ESTADO</TableColumn>
-          <TableColumn>FECHA</TableColumn>
         </TableHeader>
-        <TableBody emptyContent="No se han encontrado visitas.">
-          {mockVisits.map((visit) => (
+        <TableBody emptyContent="No se han encontrado contratos.">
+          {mockContracts.map((contract) => (
             <TableRow
-              key={visit.id}
-              className="cursor-pointer "
-              onClick={() => navigate(`/visits/${visit.id}`)}
+              key={contract.id}
+              className="cursor-pointer"
+              onClick={() => navigate(`/contracts/${contract.id}`)}
             >
-              <TableCell>{visit.id}</TableCell>
-              <TableCell>{visit.type}</TableCell>
-              <TableCell>{visit.client}</TableCell>
-              <TableCell>{visit.responsible}</TableCell>
+              <TableCell>{contract.contractNumber}</TableCell>
+              <TableCell>{contract.client}</TableCell>
+              <TableCell>{contract.startDate}</TableCell>
+              <TableCell>{contract.endDate}</TableCell>
+              <TableCell>{contract.amount}</TableCell>
               <TableCell>
-                <Chip color="primary" size="sm" variant="flat">
-                  {visit.status}
+                <Chip
+                  color={getStatusColor(contract.status) as any}
+                  size="sm"
+                  variant="flat"
+                >
+                  {contract.status}
                 </Chip>
               </TableCell>
-              <TableCell>{visit.date}</TableCell>
             </TableRow>
           ))}
         </TableBody>

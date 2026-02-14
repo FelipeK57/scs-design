@@ -10,18 +10,16 @@ import {
 } from "@heroui/react";
 import {
   ChevronLeft,
-  Users,
   Building2,
-  Wrench,
   Plus,
   Trash2,
-  Save,
   Mail,
   Phone,
   MapPin,
   User,
 } from "lucide-react";
 import { useState } from "react";
+import { Link } from "react-router";
 
 interface Equipo {
   id: string;
@@ -136,6 +134,8 @@ export const NewClient = () => {
       {/* Header Section */}
       <article className="flex flex-row gap-3 items-center">
         <Button
+          as={Link}
+          to="/clients"
           isIconOnly
           variant="light"
           size="lg"
@@ -143,32 +143,22 @@ export const NewClient = () => {
         >
           <ChevronLeft className="size-6" />
         </Button>
-        <div className="flex items-center gap-3">
-          <div className="p-2 bg-primary-50 rounded-lg">
-            <Users className="size-6 text-primary" />
-          </div>
-          <div>
-            <h1 className="text-2xl font-bold text-foreground">
-              Nuevo Cliente
-            </h1>
-            <p className="text-sm text-default-500">
-              Crea un cliente con sus máquinas y equipos asociados
-            </p>
-          </div>
+        <div className="flex flex-col">
+          <h1 className="text-2xl font-bold text-foreground">Nuevo Cliente</h1>
+          <p className="text-sm text-default-500">
+            Crea un cliente con sus máquinas y equipos asociados
+          </p>
         </div>
       </article>
 
       {/* Client Info Card */}
-      <Card className="shadow-none border-1 border-default-200">
-        <CardHeader className="pb-3 px-6 pt-6">
-          <div className="flex items-center gap-2">
-            <Users className="size-5 text-primary" />
-            <h2 className="text-lg font-semibold text-foreground">
-              Información del Cliente
-            </h2>
-          </div>
+      <Card className="shadow-small p-4">
+        <CardHeader>
+          <h2 className="text-lg font-semibold text-foreground">
+            Información del Cliente
+          </h2>
         </CardHeader>
-        <CardBody className="px-6 pb-6">
+        <CardBody className="flex flex-col gap-6">
           <Input
             label="Nombre del cliente"
             labelPlacement="outside"
@@ -186,14 +176,13 @@ export const NewClient = () => {
       <div className="flex flex-col gap-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Building2 className="size-5 text-success" />
             <h2 className="text-lg font-semibold text-foreground">Máquinas</h2>
-            <Chip size="sm" variant="flat" color="success">
+            <Chip size="sm" variant="flat">
               {maquinas.length}
             </Chip>
           </div>
           <Button
-            color="success"
+            color="primary"
             variant="flat"
             startContent={<Plus className="size-4" />}
             onPress={addMaquina}
@@ -205,16 +194,13 @@ export const NewClient = () => {
         {maquinas.map((maquina, maquinaIndex) => (
           <Card
             key={maquina.id}
-            className="shadow-none border-1 border-default-200"
+            className="shadow-small p-4"
           >
-            <CardHeader className="pb-3 px-6 pt-6">
+            <CardHeader>
               <div className="flex items-center justify-between w-full">
-                <div className="flex items-center gap-2">
-                  <Building2 className="size-5 text-success" />
-                  <h3 className="text-md font-semibold text-foreground">
-                    Máquina #{maquinaIndex + 1}
-                  </h3>
-                </div>
+                <h3 className="text-md font-semibold text-foreground">
+                  Máquina #{maquinaIndex + 1}
+                </h3>
                 {maquinas.length > 1 && (
                   <Button
                     isIconOnly
@@ -228,7 +214,7 @@ export const NewClient = () => {
                 )}
               </div>
             </CardHeader>
-            <CardBody className="px-6 pb-6 flex flex-col gap-5">
+            <CardBody className="flex flex-col gap-5">
               {/* Machine Details */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <Input
@@ -313,17 +299,15 @@ export const NewClient = () => {
               <div className="flex flex-col gap-3 mt-2">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <Wrench className="size-4 text-warning" />
                     <h4 className="text-sm font-semibold text-foreground">
                       Equipos de esta máquina
                     </h4>
-                    <Chip size="sm" variant="flat" color="warning">
+                    <Chip size="sm" variant="flat">
                       {maquina.equipos.length}
                     </Chip>
                   </div>
                   <Button
                     size="sm"
-                    color="warning"
                     variant="flat"
                     startContent={<Plus className="size-3" />}
                     onPress={() => addEquipo(maquina.id)}
@@ -341,7 +325,6 @@ export const NewClient = () => {
                         "bg-content1 hover:bg-content2 transition-colors",
                       )}
                     >
-                      <Wrench className="size-4 text-warning shrink-0" />
                       <Input
                         variant="bordered"
                         placeholder={`Equipo #${equipoIndex + 1}`}
@@ -382,8 +365,7 @@ export const NewClient = () => {
         <Button
           color="primary"
           size="lg"
-          startContent={<Save className="size-4" />}
-          className="font-medium px-8"
+          className="font-medium"
         >
           Crear cliente
         </Button>
