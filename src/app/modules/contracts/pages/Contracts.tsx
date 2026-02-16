@@ -1,6 +1,5 @@
 import {
   Button,
-  Chip,
   Input,
   Pagination,
   Select,
@@ -12,7 +11,7 @@ import {
   TableHeader,
   TableRow,
 } from "@heroui/react";
-import { ListFilter, PlusIcon, SearchIcon } from "lucide-react";
+import { ListFilter, PlusIcon, Search } from "lucide-react";
 import { Link, useNavigate } from "react-router";
 
 const mockContracts = [
@@ -108,25 +107,12 @@ const mockContracts = [
   },
 ];
 
-const getStatusColor = (status: string) => {
-  switch (status) {
-    case "Activo":
-      return "success";
-    case "Por Vencer":
-      return "warning";
-    case "Expirado":
-      return "danger";
-    default:
-      return "default";
-  }
-};
-
 export const Contracts = () => {
   const navigate = useNavigate();
 
   return (
     <main className="flex flex-col gap-4 w-full">
-      <h1 className="text-xl font-semibold">Contratos</h1>
+      <h1 className="text-lg font-semibold">Lista de Contratos</h1>
 
       <Table
         aria-label="Contratos table"
@@ -136,15 +122,16 @@ export const Contracts = () => {
           <article className="flex flex-row justify-between gap-2">
             <Input
               className="max-w-xs"
-              variant="bordered"
+              radius="sm"
               isClearable
               placeholder="Buscar contratos..."
-              startContent={<SearchIcon className="size-4 text-divider" />}
+              startContent={<Search className="size-4" />}
               onClear={() => {}}
             />
             <article className="flex w-full justify-end items-center gap-2">
               <Button
                 className="min-w-fit"
+                radius="sm"
                 variant="flat"
                 startContent={<ListFilter className="size-4" />}
               >
@@ -155,6 +142,7 @@ export const Contracts = () => {
                 to="/contracts/new"
                 color="primary"
                 className="min-w-fit"
+                radius="sm"
                 startContent={<PlusIcon className="size-4" />}
               >
                 Crear Contrato
@@ -167,7 +155,7 @@ export const Contracts = () => {
             <article className="flex items-center">
               <span className="text-sm">Items por página:</span>
               <Select
-                variant="bordered"
+                radius="sm"
                 className="ml-2 w-20"
                 aria-label="Cantidad items"
                 aria-labelledby="Items por página"
@@ -183,7 +171,11 @@ export const Contracts = () => {
             <Pagination
               isCompact
               showControls
-              showShadow
+              disableAnimation
+              classNames={{
+                wrapper: "shadow-none",
+              }}
+              radius="sm"
               color="primary"
               page={1}
               total={20}
@@ -212,15 +204,7 @@ export const Contracts = () => {
               <TableCell>{contract.startDate}</TableCell>
               <TableCell>{contract.endDate}</TableCell>
               <TableCell>{contract.amount}</TableCell>
-              <TableCell>
-                <Chip
-                  color={getStatusColor(contract.status) as any}
-                  size="sm"
-                  variant="flat"
-                >
-                  {contract.status}
-                </Chip>
-              </TableCell>
+              <TableCell>{contract.status}</TableCell>
             </TableRow>
           ))}
         </TableBody>

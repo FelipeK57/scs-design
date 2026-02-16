@@ -1,21 +1,26 @@
-import { Button, Card, CardBody, CardHeader, Chip, Divider } from "@heroui/react";
+import {
+  Button,
+  Card,
+  CardBody,
+  CardHeader,
+  Divider,
+} from "@heroui/react";
 import {
   ChevronLeft,
   User,
   Calendar,
   Clock,
   AlertCircle,
-  CheckCircle2,
   Mail,
   Phone,
 } from "lucide-react";
-import { useParams, useNavigate } from "react-router";
+import { useParams, useNavigate, Link } from "react-router";
 
 // Mock data
 const mockRemoteSupportData = {
   1: {
     id: 1,
-    ticketNumber: "TKT-2024-001",
+    ticketNumber: "001",
     client: "Empresa A",
     technician: "Juan Pérez",
     issueType: "Soporte Técnico",
@@ -30,9 +35,9 @@ const mockRemoteSupportData = {
     },
     issue: {
       description:
-        "El sistema de gestión de inventario presenta errores al intentar generar reportes mensuales. Los usuarios reportan que la aplicación se congela al hacer clic en el botón 'Generar Reporte'.",
+        "El sistema de gestión de inventario presenta errores al intentar generar reportes mensuales. Los usuarios reportan que la aplicación se congela al hacer clic en el botón 'Generar Reporte' de manera repetida sin éxito por más de 5 intentos consecutivos sin obtener resultados.",
       solution:
-        "Se identificó un problema de memoria en la consulta SQL que recupera los datos. Se optimizó la consulta agregando índices a las tablas relevantes y se implementó paginación en el servidor. Se realizó limpieza de caché del navegador y se reiniciaron los servicios del servidor de aplicaciones.",
+        "Se identificó un problema de memoria en la consulta SQL que recupera los datos. Se optimizó la consulta agregando índices a las tablas relevantes y se implementó paginación en el servidor. Se realizó limpieza de caché del navegador y se reiniciaron los servicios del servidor de aplicaciones para corregir el problema de manera permanente por más de 5 intentos consecutivos sin obtener resultados.",
     },
   },
   2: {
@@ -57,19 +62,6 @@ const mockRemoteSupportData = {
         "En proceso: Se están creando los roles personalizados en el sistema y configurando los permisos de acceso a los módulos financieros.",
     },
   },
-};
-
-const getStatusColor = (status: string) => {
-  switch (status) {
-    case "Completada":
-      return "success";
-    case "En Progreso":
-      return "warning";
-    case "En Espera":
-      return "secondary";
-    default:
-      return "default";
-  }
 };
 
 export const RemoteSupportDetails = () => {
@@ -102,42 +94,20 @@ export const RemoteSupportDetails = () => {
     <main className="flex flex-col gap-6 pb-8">
       {/* Header Section */}
       <article className="flex flex-row gap-3 items-center">
-        <Button
-          isIconOnly
-          variant="light"
-          size="lg"
-          className="hover:bg-default-100"
-          onPress={() => navigate("/remote-support")}
-        >
-          <ChevronLeft className="size-6" />
-        </Button>
-        <div className="flex-1">
-          <div className="flex items-center gap-3 flex-wrap">
-            <h1 className="text-2xl font-bold text-foreground">
-              {sessionData.ticketNumber}
-            </h1>
-            <Chip
-              color={getStatusColor(sessionData.status) as any}
-              variant="flat"
-              size="lg"
-            >
-              {sessionData.status}
-            </Chip>
-          </div>
-          <p className="text-sm text-default-500 mt-1">
-            Cliente: {sessionData.client}
-          </p>
-        </div>
+        <Link to="/remote-support" className="text-xs border-b">
+          Volver
+        </Link>
       </article>
+      <h1 className="text-xl font-semibold text-foreground">
+        Detalles de la atención remota: OT-{sessionData.ticketNumber}
+      </h1>
 
-      {/* Session Summary Card */}
-      <Card className="shadow-sm border-1 border-default-200 p-4">
-        <CardHeader>
-          <h2 className="text-lg font-semibold text-foreground">
-            Resumen de la sesión
-          </h2>
-        </CardHeader>
-        <CardBody className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+      <section className="space-y-4">
+        {/* Session Summary Card */}
+        <h2 className="text-lg font-semibold text-foreground">
+          Resumen de la sesión
+        </h2>
+        <article className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
           <div className="flex flex-col gap-2">
             <div className="flex items-center gap-2 text-default-500">
               <User className="size-4" />
@@ -177,19 +147,18 @@ export const RemoteSupportDetails = () => {
               {sessionData.duration} (inicio: {sessionData.startTime})
             </p>
           </div>
-        </CardBody>
-      </Card>
+        </article>
+      </section>
+
+      <Divider />
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Requester Info Card */}
-        <Card className="shadow-sm border-1 border-default-200 p-4 lg:col-span-1">
+        <Card radius="sm" shadow="sm" className="border-1 border-default-200 h-fit p-4 lg:col-span-1">
           <CardHeader>
-            <div className="flex items-center gap-2">
-              <User className="size-5 text-primary" />
-              <h2 className="text-lg font-semibold text-foreground">
-                Quien solicitó
-              </h2>
-            </div>
+            <h2 className="text-lg font-semibold text-foreground">
+              Quien solicitó
+            </h2>
           </CardHeader>
           <CardBody className="flex flex-col gap-4">
             <div className="flex flex-col gap-2">
@@ -229,60 +198,39 @@ export const RemoteSupportDetails = () => {
         </Card>
 
         {/* Issue Details Card */}
-        <Card className="shadow-sm border-1 border-default-200 p-4 lg:col-span-2">
-          <CardHeader>
-            <div className="flex items-center gap-2">
-              <AlertCircle className="size-5 text-warning" />
-              <h2 className="text-lg font-semibold text-foreground">
-                Detalles de la atención
-              </h2>
-            </div>
-          </CardHeader>
-          <CardBody className="flex flex-col gap-5">
-            {/* Problem Description */}
-            <div className="flex flex-col gap-3">
-              <div className="flex items-center gap-2">
-                <AlertCircle className="size-5 text-danger" />
+        <section className="space-y-4 lg:col-span-2">
+            <h2 className="text-lg font-semibold text-foreground">
+              Detalles de la atención
+            </h2>
+            <div className="flex flex-col gap-5">
+              {/* Problem Description */}
+              <div className="flex flex-col gap-3">
                 <h3 className="text-base font-semibold text-foreground">
                   Problema reportado
                 </h3>
+                <div className="pl-5">
+                  <p className="text-sm text-default-700 leading-relaxed">
+                    {sessionData.issue.description}
+                  </p>
+                </div>
               </div>
-              <div className="pl-7">
-                <p className="text-sm text-default-700 leading-relaxed">
-                  {sessionData.issue.description}
-                </p>
-              </div>
-            </div>
 
-            <Divider />
+              <Divider />
 
-            {/* Solution Applied */}
-            <div className="flex flex-col gap-3">
-              <div className="flex items-center gap-2">
-                <CheckCircle2 className="size-5 text-success" />
+              {/* Solution Applied */}
+              <div className="flex flex-col gap-3">
                 <h3 className="text-base font-semibold text-foreground">
                   Solución aplicada
                 </h3>
-              </div>
-              <div className="pl-7">
-                <p className="text-sm text-default-700 leading-relaxed">
-                  {sessionData.issue.solution}
-                </p>
+                <div className="pl-5">
+                  <p className="text-sm text-default-700 leading-relaxed">
+                    {sessionData.issue.solution}
+                  </p>
+                </div>
               </div>
             </div>
-          </CardBody>
-        </Card>
+        </section>
       </div>
-
-      {/* Action Buttons
-      <div className="flex justify-end gap-4">
-        <Button variant="flat" size="lg">
-          Editar
-        </Button>
-        <Button color="primary" variant="flat" size="lg">
-          Generar reporte
-        </Button>
-      </div> */}
     </main>
   );
 };

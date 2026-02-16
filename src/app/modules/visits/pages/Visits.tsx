@@ -102,7 +102,7 @@ export const Visits = () => {
 
   return (
     <main className="flex flex-col gap-4 w-full">
-      <h1 className="text-xl font-semibold">Lista de Visitas</h1>
+      <h1 className="text-lg font-semibold">Lista de Visitas</h1>
 
       <Table
         aria-label="Visitas table"
