@@ -1,6 +1,5 @@
 import {
   Button,
-  Chip,
   Input,
   Pagination,
   Select,
@@ -12,7 +11,7 @@ import {
   TableHeader,
   TableRow,
 } from "@heroui/react";
-import { ListFilter, PlusIcon, SearchIcon } from "lucide-react";
+import { ListFilter, Plus, Search } from "lucide-react";
 import { Link, useNavigate } from "react-router";
 
 const mockRemoteSessions = [
@@ -108,19 +107,6 @@ const mockRemoteSessions = [
   },
 ];
 
-const getStatusColor = (status: string) => {
-  switch (status) {
-    case "Completada":
-      return "success";
-    case "En Progreso":
-      return "warning";
-    case "En Espera":
-      return "secondary";
-    default:
-      return "default";
-  }
-};
-
 export const RemoteSupport = () => {
   const navigate = useNavigate();
 
@@ -131,33 +117,32 @@ export const RemoteSupport = () => {
       <Table
         aria-label="Atenciones Remotas table"
         selectionMode="single"
+        radius="sm"
         removeWrapper
         topContent={
-          <article className="space-y-2">
-            <p className="text-xs">Resultados (100)</p>
-            <article className="flex flex-row justify-between gap-2">
-              <Input
-                className="max-w-xs"
+          <article className="flex flex-row justify-between gap-2">
+            <Input
+              className="max-w-xs"
+              radius="sm"
+              isClearable
+              startContent={<Search className="size-4" />}
+              placeholder="Buscar..."
+              onClear={() => {}}
+            />
+            <article className="flex w-full justify-end items-center gap-2">
+              <Button className="min-w-fit" radius="sm" variant="flat" startContent={<ListFilter className="size-4" />}>
+                Filtros
+              </Button>
+              <Button
+                as={Link}
+                to="/remote-support/new"
+                color="primary"
+                className="min-w-fit"
                 radius="sm"
-                variant="bordered"
-                isClearable
-                placeholder="Buscar..."
-                onClear={() => {}}
-              />
-              <article className="flex w-full justify-end items-center gap-2">
-                <Button className="min-w-fit" radius="sm" variant="flat">
-                  Filtros
-                </Button>
-                <Button
-                  as={Link}
-                  to="/remote-support/new"
-                  color="primary"
-                  className="min-w-fit"
-                  radius="sm"
-                >
-                  Crear Atención
-                </Button>
-              </article>
+                startContent={<Plus className="size-4" />}
+              >
+                Crear Atención
+              </Button>
             </article>
           </article>
         }
@@ -166,7 +151,6 @@ export const RemoteSupport = () => {
             <article className="flex items-center">
               <span className="text-sm">Items por página:</span>
               <Select
-                variant="bordered"
                 className="ml-2 w-20"
                 radius="sm"
                 aria-label="Cantidad items"
@@ -185,12 +169,12 @@ export const RemoteSupport = () => {
               showControls
               disableAnimation
               classNames={{
-                wrapper: "shadow-none"
+                wrapper: "shadow-none",
               }}
               radius="sm"
               color="primary"
               page={1}
-              total={20}
+              total={5}
               onChange={() => {}}
             />
           </article>
@@ -218,15 +202,7 @@ export const RemoteSupport = () => {
               <TableCell>{session.issueType}</TableCell>
               <TableCell>{session.startTime}</TableCell>
               <TableCell>{session.duration}</TableCell>
-              <TableCell>
-                <Chip
-                  color={getStatusColor(session.status) as any}
-                  size="sm"
-                  variant="flat"
-                >
-                  {session.status}
-                </Chip>
-              </TableCell>
+              <TableCell>{session.status}</TableCell>
             </TableRow>
           ))}
         </TableBody>

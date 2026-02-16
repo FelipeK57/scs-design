@@ -33,7 +33,8 @@ export const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
       {/* Sidebar para móvil (drawer) */}
       <aside
         className={`
-          fixed top-0 left-0 z-30 h-full w-72 bg-background border-r border-content3 dark:border-content1
+          fixed top-0 left-0 z-30 h-full w-72 bg-background border-r border-content3 
+          dark:border-content1
           transform transition-transform duration-300 ease-in-out
           lg:hidden
           ${isOpen ? "translate-x-0" : "-translate-x-full"}
@@ -61,7 +62,7 @@ export const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
               key={route.name}
               onClick={onClose}
               className={`
-                flex items-center gap-3 px-4 py-3 rounded-lg transition-all active:scale-95
+                flex items-center gap-3 px-4 py-3 rounded-lg transition-colors
                 ${
                   isActive(route.path)
                     ? " text-primary-600 font-medium"
@@ -77,20 +78,20 @@ export const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
       </aside>
 
       {/* Sidebar para desktop (fijo) */}
-      <aside className="hidden lg:flex flex-col w-72 bg-background border-r border-content3 dark:border-content1">
+      <aside className="hidden lg:flex flex-col w-64 bg-background border-r border-content3 dark:border-content1">
         {/* Logo */}
         <div className="flex items-center px-6 py-5 border-b border-content3 dark:border-content1">
           <img src="/Logo.png" alt="ReaDx Logo" className="h-6 w-auto" />
         </div>
 
         {/* Navegación desktop */}
-        <nav className="flex flex-col gap-2 p-4">
+        <nav className="flex flex-col gap-4 p-4">
           {routes.map((route) => (
             <Link
               to={route.path}
               key={route.name}
               className={`
-                flex items-center gap-3 px-4 py-3 rounded-lg transition-all active:scale-95
+                flex items-center gap-3 px-2 py-2 rounded-lg transition-colors
                 ${
                   isActive(route.path)
                     ? " text-primary-600 font-medium"

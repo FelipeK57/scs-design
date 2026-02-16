@@ -11,7 +11,7 @@ import {
   TableHeader,
   TableRow,
 } from "@heroui/react";
-import { ListFilter, PlusIcon, SearchIcon } from "lucide-react";
+import { ListFilter, Plus, Search } from "lucide-react";
 import { Link, useNavigate } from "react-router";
 
 const mockClients = [
@@ -82,7 +82,7 @@ export const Clients = () => {
 
   return (
     <main className="flex flex-col gap-4 w-full">
-      <h1 className="text-xl font-semibold">Clientes</h1>
+      <h1 className="text-lg font-semibold">Lista de Clientes</h1>
 
       <Table
         aria-label="Clientes table"
@@ -92,15 +92,16 @@ export const Clients = () => {
           <article className="flex flex-row justify-between gap-2">
             <Input
               className="max-w-xs"
-              variant="bordered"
+              radius="sm"
               isClearable
-              placeholder="Buscar clientes..."
-              startContent={<SearchIcon className="size-4 text-divider" />}
+              placeholder="Buscar..."
+              startContent={<Search className="size-4" />}
               onClear={() => {}}
             />
             <article className="flex w-full justify-end items-center gap-2">
               <Button
                 className="min-w-fit"
+                radius="sm"
                 variant="flat"
                 startContent={<ListFilter className="size-4" />}
               >
@@ -111,7 +112,8 @@ export const Clients = () => {
                 to="/clients/new"
                 color="primary"
                 className="min-w-fit"
-                startContent={<PlusIcon className="size-4" />}
+                radius="sm"
+                startContent={<Plus className="size-4" />}
               >
                 Crear Cliente
               </Button>
@@ -123,9 +125,9 @@ export const Clients = () => {
             <article className="flex items-center">
               <span className="text-sm">Items por página:</span>
               <Select
-                variant="bordered"
                 className="ml-2 w-20"
                 size="sm"
+                radius="sm"
                 defaultSelectedKeys={[(10).toString()]}
                 disallowEmptySelection
               >
@@ -137,10 +139,14 @@ export const Clients = () => {
             <Pagination
               isCompact
               showControls
-              showShadow
+              disableAnimation
+              classNames={{
+                wrapper: "shadow-none",
+              }}
+              radius="sm"
               color="primary"
               page={1}
-              total={20}
+              total={5}
               onChange={() => {}}
             />
           </article>

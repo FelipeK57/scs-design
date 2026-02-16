@@ -1,6 +1,5 @@
 import {
   Button,
-  Chip,
   Input,
   Pagination,
   Select,
@@ -103,7 +102,7 @@ export const Visits = () => {
 
   return (
     <main className="flex flex-col gap-4 w-full">
-      <h1 className="text-xl font-semibold">Visitas</h1>
+      <h1 className="text-xl font-semibold">Lista de Visitas</h1>
 
       <Table
         aria-label="Visitas table"
@@ -113,16 +112,17 @@ export const Visits = () => {
           <article className="flex flex-row justify-between gap-2">
             <Input
               className="max-w-xs"
-              variant="bordered"
               isClearable
-              placeholder="Buscar visitas..."
-              startContent={<SearchIcon className="size-4 text-divider" />}
+              placeholder="Buscar..."
+              startContent={<SearchIcon className="size-4" />}
               onClear={() => {}}
+              radius="sm"
             />
             <article className="flex w-full justify-end items-center gap-2">
               <Button
                 className="min-w-fit"
                 variant="flat"
+                radius="sm"
                 startContent={<ListFilter className="size-4" />}
               >
                 Filtros
@@ -132,6 +132,7 @@ export const Visits = () => {
                 to="/visits/new"
                 color="primary"
                 className="min-w-fit"
+                radius="sm"
                 startContent={<PlusIcon className="size-4" />}
               >
                 Crear Visita
@@ -144,8 +145,8 @@ export const Visits = () => {
             <article className="flex items-center">
               <span className="text-sm">Items por página:</span>
               <Select
-                variant="bordered"
                 className="ml-2 w-20"
+                radius="sm"
                 aria-label="Cantidad items"
                 aria-labelledby="Items por página"
                 size="sm"
@@ -159,8 +160,12 @@ export const Visits = () => {
             </article>
             <Pagination
               isCompact
+              radius="sm"
               showControls
-              showShadow
+              disableAnimation
+              classNames={{
+                wrapper: "shadow-none",
+              }}
               color="primary"
               page={1}
               total={20}
@@ -188,11 +193,7 @@ export const Visits = () => {
               <TableCell>{visit.type}</TableCell>
               <TableCell>{visit.client}</TableCell>
               <TableCell>{visit.responsible}</TableCell>
-              <TableCell>
-                <Chip color="primary" size="sm" variant="flat">
-                  {visit.status}
-                </Chip>
-              </TableCell>
+              <TableCell>{visit.status}</TableCell>
               <TableCell>{visit.date}</TableCell>
             </TableRow>
           ))}

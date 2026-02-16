@@ -2,19 +2,19 @@ import { BrowserRouter, Route, Routes } from "react-router";
 import { MainLayout } from "../components/layout/MainLayout";
 
 // Routes
-import { Clients } from "../features/clients/pages/Clients";
-import { ClientDetails } from "../features/clients/pages/ClientDetails";
-import { Visits } from "../features/visits/pages/Visits";
-import { NewVisit } from "../features/visits/pages/NewVisit";
-import { VisitDetails } from "../features/visits/pages/VisitDetails";
-import { NewClient } from "../features/clients/pages/NewClient";
-import { Contracts } from "../features/contracts/pages/Contracts";
-import { NewContract } from "../features/contracts/pages/NewContract";
-import { ContractDetails } from "../features/contracts/pages/ContractDetails";
-import { RemoteSupport } from "../features/remote-support/pages/RemoteSupport";
-import { NewRemoteSupport } from "../features/remote-support/pages/NewRemoteSupport";
-import { RemoteSupportDetails } from "../features/remote-support/pages/RemoteSupportDetails";
-import { Dashboard } from "../features/dashboard/Dashboard";
+import { Clients } from "../modules/clients/pages/Clients";
+import { ClientDetails } from "../modules/clients/pages/ClientDetails";
+import { Visits } from "../modules/visits/pages/Visits";
+import { NewVisit } from "../modules/visits/pages/NewVisit";
+import { VisitDetails } from "../modules/visits/pages/VisitDetails";
+import { NewClient } from "../modules/clients/pages/NewClient";
+import { Contracts } from "../modules/contracts/pages/Contracts";
+import { NewContract } from "../modules/contracts/pages/NewContract";
+import { ContractDetails } from "../modules/contracts/pages/ContractDetails";
+import { RemoteSupport } from "../modules/remote-support/pages/RemoteSupport";
+import { NewRemoteSupport } from "../modules/remote-support/pages/NewRemoteSupport";
+import { RemoteSupportDetails } from "../modules/remote-support/pages/RemoteSupportDetails";
+import { Dashboard } from "../modules/dashboard/Dashboard";
 
 export const RouterProvider = () => {
   return (

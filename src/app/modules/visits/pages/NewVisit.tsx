@@ -1,20 +1,18 @@
 import {
   Button,
-  Card,
-  CardBody,
-  CardHeader,
   Checkbox,
   CheckboxGroup,
   Chip,
-  cn,
   DatePicker,
+  Divider,
   Input,
   NumberInput,
   Select,
   SelectItem,
   Textarea,
+  cn,
 } from "@heroui/react";
-import { ChevronLeft, Clock, Pencil, Save, Trash2, X } from "lucide-react";
+import { Pencil, Save, Trash2, X } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Link } from "react-router";
 
@@ -165,21 +163,14 @@ export const NewVisit = () => {
   };
 
   return (
-    <main className="flex flex-col gap-6 pb-8">
+    <main className="flex flex-col gap-8 pb-8">
       {/* Header Section */}
-      <article className="flex flex-row gap-3 items-center">
-        <Button
-          as={Link}
-          to="/visits"
-          isIconOnly
-          variant="light"
-          size="lg"
-          className="hover:bg-default-100"
-        >
-          <ChevronLeft className="size-6" />
-        </Button>
+      <article className="flex flex-col items-start gap-4">
+        <Link to="/visits" className="text-xs border-b">
+          Volver
+        </Link>
         <div>
-          <h1 className="text-2xl font-bold text-foreground">
+          <h1 className="text-xl font-bold text-foreground">
             Planificación de visita
           </h1>
           <p className="text-sm text-default-500">
@@ -188,18 +179,16 @@ export const NewVisit = () => {
         </div>
       </article>
 
-      {/* Details Card */}
-      <Card className="shadow-small p-4">
-        <CardHeader>
-          <h2 className="text-lg font-semibold text-foreground">
-            Detalles de la visita
-          </h2>
-        </CardHeader>
-        <CardBody className="grid grid-cols-1 md:grid-cols-3 gap-5">
+      {/* Details Section */}
+      <section className="space-y-4">
+        <h2 className="font-semibold text-foreground">
+          1. Detalles de la visita
+        </h2>
+        <section className="grid grid-cols-1 md:grid-cols-3 gap-5">
           <Select
+            radius="sm"
             label="Seleccionar cliente"
             labelPlacement="outside"
-            variant="bordered"
             placeholder="Selecciona un cliente"
             selectedKeys={
               selectedClientId ? new Set([selectedClientId]) : new Set([])
@@ -216,9 +205,9 @@ export const NewVisit = () => {
             ))}
           </Select>
           <Select
+            radius="sm"
             label="Seleccionar máquina"
             labelPlacement="outside"
-            variant="bordered"
             placeholder={
               selectedClient
                 ? "Selecciona una máquina"
@@ -246,9 +235,9 @@ export const NewVisit = () => {
             ))}
           </Select>
           <Select
+            radius="sm"
             label="Responsable de la visita"
             labelPlacement="outside"
-            variant="bordered"
             placeholder="Selecciona un responsable"
           >
             <SelectItem key="responsible1">Responsable 1</SelectItem>
@@ -256,9 +245,9 @@ export const NewVisit = () => {
             <SelectItem key="responsible3">Responsable 3</SelectItem>
           </Select>
           <Select
+            radius="sm"
             label="Tipo de visita"
             labelPlacement="outside"
-            variant="bordered"
             placeholder="Selecciona un tipo de visita"
             selectedKeys={
               effectiveVisitType ? new Set([effectiveVisitType]) : new Set([])
@@ -275,17 +264,16 @@ export const NewVisit = () => {
             <SelectItem key="additional">Adicional</SelectItem>
           </Select>
           <DatePicker
+            radius="sm"
             label="Fecha de la visita"
             labelPlacement="outside"
-            variant="bordered"
           />
           <NumberInput
+            radius="sm"
             label="Días de duración"
             labelPlacement="outside"
             placeholder="Ingresa número de días"
-            variant="bordered"
             minValue={1}
-            startContent={<Clock className="size-4 text-default-400" />}
           />
           {/* Estado de contrato */}
           <div className="flex items-center gap-2">
@@ -308,31 +296,34 @@ export const NewVisit = () => {
               </Chip>
             )}
           </div>
-        </CardBody>
-      </Card>
+        </section>
+      </section>
+
+      <Divider />
 
       {/* Activities Section depending on visit type */}
       {effectiveVisitType ? (
         isPreventiveAllowed ? (
-          <section className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* Preventive Activities */}
-            <Card className="shadow-small p-4">
-              <CardHeader>
+          <section className="space-y-4">
+            <h2 className="font-semibold text-foreground">
+              2. Actividades para la visita
+            </h2>
+            <section className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+              {/* Preventive Activities */}
+              <section className="space-y-4">
                 <div className="flex items-center justify-between w-full">
-                  <h2 className="text-lg font-semibold text-foreground">
+                  <h3 className="text-md font-semibold text-foreground">
                     Actividades preventivas
-                  </h2>
+                  </h3>
                   <Chip size="sm" variant="flat">
                     {preventiveActivities.length}
                   </Chip>
                 </div>
-              </CardHeader>
-              <CardBody>
                 <CheckboxGroup
                   disableAnimation
                   aria-label="actividades preventivas"
                   classNames={{
-                    base: "gap-3",
+                    base: "gap-3 border-1 border-default-200 rounded-lg p-3",
                   }}
                 >
                   {preventiveActivities.map(
@@ -360,27 +351,23 @@ export const NewVisit = () => {
                     ),
                   )}
                 </CheckboxGroup>
-              </CardBody>
-            </Card>
+              </section>
 
-            {/* Pending Activities */}
-            <Card className="shadow-small p-4">
-              <CardHeader>
+              {/* Pending Activities */}
+              <section className="space-y-4">
                 <div className="flex items-center justify-between w-full">
-                  <h2 className="text-lg font-semibold text-foreground">
+                  <h3 className="text-md font-semibold text-foreground">
                     Actividades pendientes
-                  </h2>
+                  </h3>
                   <Chip size="sm" variant="flat">
                     {pendingActivities.length}
                   </Chip>
                 </div>
-              </CardHeader>
-              <CardBody>
                 <CheckboxGroup
                   disableAnimation
                   aria-label="actividades pendientes"
                   classNames={{
-                    base: "gap-3",
+                    base: "gap-3 border-1 border-default-200 rounded-lg p-3",
                   }}
                 >
                   {pendingActivities.map(({ value, label, date }) => (
@@ -406,49 +393,46 @@ export const NewVisit = () => {
                     </Checkbox>
                   ))}
                 </CheckboxGroup>
-              </CardBody>
-            </Card>
+              </section>
+            </section>
           </section>
         ) : isEmergencyVisit ? (
-          <Card className="shadow-small p-4">
-            <CardHeader>
-              <h2 className="text-lg font-semibold text-foreground">
-                Emergencia: diagnóstico inicial
-              </h2>
-            </CardHeader>
-            <CardBody className="flex flex-col gap-5">
+          <section className="space-y-4">
+            <h2 className="font-semibold text-foreground">
+              2. Emergencia: diagnóstico inicial
+            </h2>
+            <section className="flex flex-col gap-5">
               <Textarea
+                radius="sm"
                 label="Problema inicial"
                 labelPlacement="outside"
-                variant="bordered"
                 placeholder="Describe el problema reportado por el cliente"
                 minRows={4}
               />
               <Textarea
+                radius="sm"
                 label="Actividades previas (sin solución)"
                 labelPlacement="outside"
-                variant="bordered"
                 placeholder="Lista las actividades realizadas previamente que no solucionaron el problema"
                 minRows={4}
               />
-            </CardBody>
-          </Card>
+            </section>
+          </section>
         ) : isAdditionalWithoutContract ? (
-          <Card className="shadow-small p-4">
-            <CardHeader>
-              <h2 className="text-lg font-semibold text-foreground">
-                Checklist solicitado por el cliente
-              </h2>
-            </CardHeader>
-            <CardBody className="flex flex-col gap-4">
+          <section className="space-y-4">
+            <h2 className="font-semibold text-foreground">
+              2. Checklist solicitado por el cliente
+            </h2>
+            <section className="flex flex-col gap-4">
               <div className="flex flex-col md:flex-row gap-3">
                 <Input
-                  variant="bordered"
+                  radius="sm"
                   value={customTaskInput}
                   onChange={(event) => setCustomTaskInput(event.target.value)}
                   placeholder="Agregar actividad solicitada"
                 />
                 <Button
+                  radius="sm"
                   color="primary"
                   onPress={addCustomTask}
                   isDisabled={!customTaskInput.trim()}
@@ -471,11 +455,11 @@ export const NewVisit = () => {
                       {editingTask === task ? (
                         <>
                           <Input
+                            radius="sm"
                             value={editTaskInput}
                             onChange={(event) =>
                               setEditTaskInput(event.target.value)
                             }
-                            variant="underlined"
                           />
                           <Button
                             isIconOnly
@@ -521,20 +505,20 @@ export const NewVisit = () => {
                   ))
                 )}
               </div>
-            </CardBody>
-          </Card>
+            </section>
+          </section>
         ) : null
       ) : null}
 
       {/* Action Buttons */}
-      <div className="flex justify-end gap-4">
-        <Button variant="flat" size="lg" className="font-medium">
+      <section className="flex flex-row justify-end gap-4">
+        <Button radius="sm" variant="light">
           Cancelar
         </Button>
-        <Button color="primary" size="lg" className="font-medium">
+        <Button radius="sm" color="primary">
           Crear visita
         </Button>
-      </div>
+      </section>
     </main>
   );
 };

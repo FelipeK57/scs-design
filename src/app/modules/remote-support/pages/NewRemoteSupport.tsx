@@ -7,7 +7,6 @@ import {
   SelectItem,
   Textarea,
 } from "@heroui/react";
-import { ChevronLeft } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router";
 
@@ -55,16 +54,9 @@ export const NewRemoteSupport = () => {
     <main className="flex flex-col gap-8">
       {/* Header Section */}
       <article className="flex flex-col items-start gap-4">
-        <Button
-          as={Link}
-          to="/remote-support"
-          variant="light"
-          radius="sm"
-          size="sm"
-          startContent={<ChevronLeft className="size-4" />}
-        >
+        <Link to="/remote-support" className="text-xs border-b">
           Volver
-        </Button>
+        </Link>
         <div>
           <h1 className="text-xl font-bold text-foreground">
             Nueva Atención Remota
@@ -83,7 +75,6 @@ export const NewRemoteSupport = () => {
             radius="sm"
             label="Cliente"
             labelPlacement="outside"
-            variant="bordered"
             placeholder="Selecciona un cliente"
             selectedKeys={
               selectedClientId ? new Set([selectedClientId]) : new Set([])
@@ -102,7 +93,6 @@ export const NewRemoteSupport = () => {
             radius="sm"
             label="Técnico responsable"
             labelPlacement="outside"
-            variant="bordered"
             placeholder="Selecciona un técnico"
             selectedKeys={
               selectedTechnician ? new Set([selectedTechnician]) : new Set([])
@@ -121,7 +111,6 @@ export const NewRemoteSupport = () => {
             radius="sm"
             label="Tipo de problema"
             labelPlacement="outside"
-            variant="bordered"
             placeholder="Selecciona el tipo"
             selectedKeys={issueType ? new Set([issueType]) : new Set([])}
             onSelectionChange={(keys) => {
@@ -138,14 +127,12 @@ export const NewRemoteSupport = () => {
             radius="sm"
             label="Fecha de atención"
             labelPlacement="outside"
-            variant="bordered"
           />
 
           <Input
             radius="sm"
             label="Duración (minutos)"
             labelPlacement="outside"
-            variant="bordered"
             type="number"
             placeholder="Ej: 45"
             value={duration}
@@ -166,7 +153,6 @@ export const NewRemoteSupport = () => {
             radius="sm"
             label="Nombre completo"
             labelPlacement="outside"
-            variant="bordered"
             placeholder="Nombre del solicitante"
             value={requesterName}
             onValueChange={setRequesterName}
@@ -177,7 +163,6 @@ export const NewRemoteSupport = () => {
             radius="sm"
             label="Correo electrónico"
             labelPlacement="outside"
-            variant="bordered"
             type="email"
             placeholder="correo@ejemplo.com"
             value={requesterEmail}
@@ -189,7 +174,6 @@ export const NewRemoteSupport = () => {
             radius="sm"
             label="Teléfono"
             labelPlacement="outside"
-            variant="bordered"
             type="tel"
             placeholder="+57 300 123 4567"
             value={requesterPhone}
@@ -211,7 +195,6 @@ export const NewRemoteSupport = () => {
             radius="sm"
             label="Descripción del problema"
             labelPlacement="outside"
-            variant="bordered"
             placeholder="Describe en detalle el problema reportado"
             value={issueDescription}
             onValueChange={setIssueDescription}
@@ -223,7 +206,6 @@ export const NewRemoteSupport = () => {
             radius="sm"
             label="Solución aplicada"
             labelPlacement="outside"
-            variant="bordered"
             placeholder="Describe las acciones realizadas y la solución implementada"
             value={solutionApplied}
             onValueChange={setSolutionApplied}
@@ -235,7 +217,7 @@ export const NewRemoteSupport = () => {
 
       {/* Action Buttons */}
       <section className="flex flex-row justify-end gap-4">
-        <Button radius="sm" variant="flat">
+        <Button radius="sm" variant="light">
           Cancelar
         </Button>
         <Button radius="sm" color="primary">

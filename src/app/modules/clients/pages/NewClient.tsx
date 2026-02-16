@@ -1,23 +1,5 @@
-import {
-  Button,
-  Card,
-  CardBody,
-  CardHeader,
-  Chip,
-  cn,
-  Input,
-  Switch,
-} from "@heroui/react";
-import {
-  ChevronLeft,
-  Building2,
-  Plus,
-  Trash2,
-  Mail,
-  Phone,
-  MapPin,
-  User,
-} from "lucide-react";
+import { Button, Chip, Divider, Input, Switch } from "@heroui/react";
+import { Plus, Trash2, X } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router";
 
@@ -130,59 +112,53 @@ export const NewClient = () => {
   };
 
   return (
-    <main className="flex flex-col gap-6 pb-8">
+    <main className="flex flex-col gap-8 pb-8">
       {/* Header Section */}
-      <article className="flex flex-row gap-3 items-center">
-        <Button
-          as={Link}
-          to="/clients"
-          isIconOnly
-          variant="light"
-          size="lg"
-          className="hover:bg-default-100"
-        >
-          <ChevronLeft className="size-6" />
-        </Button>
-        <div className="flex flex-col">
-          <h1 className="text-2xl font-bold text-foreground">Nuevo Cliente</h1>
+      <article className="flex flex-col items-start gap-4">
+        <Link to="/clients" className="text-xs border-b">
+          Volver
+        </Link>
+        <div>
+          <h1 className="text-xl font-bold text-foreground">Nuevo Cliente</h1>
           <p className="text-sm text-default-500">
             Crea un cliente con sus máquinas y equipos asociados
           </p>
         </div>
       </article>
 
-      {/* Client Info Card */}
-      <Card className="shadow-small p-4">
-        <CardHeader>
-          <h2 className="text-lg font-semibold text-foreground">
-            Información del Cliente
-          </h2>
-        </CardHeader>
-        <CardBody className="flex flex-col gap-6">
+      {/* Client Info Section */}
+      <section className="space-y-4">
+        <h2 className="font-semibold text-foreground">
+          1. Información del cliente
+        </h2>
+        <section className="grid grid-cols-1 md:grid-cols-3 gap-5">
           <Input
+            radius="sm"
             label="Nombre del cliente"
             labelPlacement="outside"
-            variant="bordered"
             placeholder="Ingresa el nombre del cliente"
             value={clienteName}
             onValueChange={setClienteName}
-            startContent={<User className="size-4 text-default-400" />}
             isRequired
           />
-        </CardBody>
-      </Card>
+        </section>
+      </section>
+
+      <Divider />
 
       {/* Machines Section */}
-      <div className="flex flex-col gap-4">
-        <div className="flex items-center justify-between">
+      <section className="space-y-4">
+        <div className="flex items-center justify-between sticky -top-8 bg-background z-50 py-1">
           <div className="flex items-center gap-2">
-            <h2 className="text-lg font-semibold text-foreground">Máquinas</h2>
-            <Chip size="sm" variant="flat">
+            <h2 className="font-semibold text-foreground">
+              2. Máquinas y equipos
+            </h2>
+            <Chip variant="flat">
               {maquinas.length}
             </Chip>
           </div>
           <Button
-            color="primary"
+            radius="sm"
             variant="flat"
             startContent={<Plus className="size-4" />}
             onPress={addMaquina}
@@ -191,94 +167,82 @@ export const NewClient = () => {
           </Button>
         </div>
 
-        {maquinas.map((maquina, maquinaIndex) => (
-          <Card
-            key={maquina.id}
-            className="shadow-small p-4"
-          >
-            <CardHeader>
-              <div className="flex items-center justify-between w-full">
+        <section className="flex flex-col gap-4">
+          {maquinas.map((maquina, maquinaIndex) => (
+            <section key={maquina.id} className="space-y-4">
+              <header className="flex items-center justify-between w-full">
                 <h3 className="text-md font-semibold text-foreground">
                   Máquina #{maquinaIndex + 1}
                 </h3>
                 {maquinas.length > 1 && (
                   <Button
                     isIconOnly
-                    size="sm"
                     color="danger"
-                    variant="flat"
+                    variant="light"
                     onPress={() => removeMaquina(maquina.id)}
                   >
                     <Trash2 className="size-4" />
                   </Button>
                 )}
-              </div>
-            </CardHeader>
-            <CardBody className="flex flex-col gap-5">
+              </header>
+
               {/* Machine Details */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <Input
+                  radius="sm"
                   label="Nombre de la máquina"
                   labelPlacement="outside"
-                  variant="bordered"
                   placeholder="Ingresa el nombre"
                   value={maquina.nombre}
                   onValueChange={(value) =>
                     updateMaquina(maquina.id, "nombre", value)
                   }
-                  startContent={
-                    <Building2 className="size-4 text-default-400" />
-                  }
                   isRequired
                 />
                 <Input
+                  radius="sm"
                   label="Ciudad"
                   labelPlacement="outside"
-                  variant="bordered"
                   placeholder="Ingresa la ciudad"
                   value={maquina.ciudad}
                   onValueChange={(value) =>
                     updateMaquina(maquina.id, "ciudad", value)
                   }
-                  startContent={<MapPin className="size-4 text-default-400" />}
                   isRequired
                 />
                 <Input
+                  radius="sm"
                   label="Contacto"
                   labelPlacement="outside"
-                  variant="bordered"
                   placeholder="Nombre del contacto"
                   value={maquina.contacto}
                   onValueChange={(value) =>
                     updateMaquina(maquina.id, "contacto", value)
                   }
-                  startContent={<User className="size-4 text-default-400" />}
                   isRequired
                 />
                 <Input
+                  radius="sm"
                   label="Correo electrónico"
                   labelPlacement="outside"
-                  variant="bordered"
                   type="email"
                   placeholder="correo@ejemplo.com"
                   value={maquina.correo}
                   onValueChange={(value) =>
                     updateMaquina(maquina.id, "correo", value)
                   }
-                  startContent={<Mail className="size-4 text-default-400" />}
                   isRequired
                 />
                 <Input
+                  radius="sm"
                   label="Teléfono"
                   labelPlacement="outside"
-                  variant="bordered"
                   type="tel"
                   placeholder="+57 300 123 4567"
                   value={maquina.telefono}
                   onValueChange={(value) =>
                     updateMaquina(maquina.id, "telefono", value)
                   }
-                  startContent={<Phone className="size-4 text-default-400" />}
                   isRequired
                 />
                 <div className="flex items-end">
@@ -299,15 +263,15 @@ export const NewClient = () => {
               <div className="flex flex-col gap-3 mt-2">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <h4 className="text-sm font-semibold text-foreground">
+                    <h4 className="font-semibold text-foreground">
                       Equipos de esta máquina
                     </h4>
-                    <Chip size="sm" variant="flat">
+                    <Chip variant="flat">
                       {maquina.equipos.length}
                     </Chip>
                   </div>
                   <Button
-                    size="sm"
+                    radius="sm"
                     variant="flat"
                     startContent={<Plus className="size-3" />}
                     onPress={() => addEquipo(maquina.id)}
@@ -316,60 +280,50 @@ export const NewClient = () => {
                   </Button>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                   {maquina.equipos.map((equipo, equipoIndex) => (
-                    <div
-                      key={equipo.id}
-                      className={cn(
-                        "flex items-center gap-2 p-3 rounded-lg border-2 border-default-200",
-                        "bg-content1 hover:bg-content2 transition-colors",
-                      )}
-                    >
+                    <div key={equipo.id}>
                       <Input
-                        variant="bordered"
+                        radius="sm"
                         placeholder={`Equipo #${equipoIndex + 1}`}
                         value={equipo.nombre_equipo}
                         onValueChange={(value) =>
                           updateEquipo(maquina.id, equipo.id, value)
                         }
-                        size="sm"
-                        classNames={{
-                          inputWrapper: "border-none shadow-none",
-                        }}
+                        endContent={
+                          maquina.equipos.length > 1 && (
+                            <button
+                              className="p-2 rounded-full hover:bg-default transition-colors"
+                              onClick={() =>
+                                removeEquipo(maquina.id, equipo.id)
+                              }
+                            >
+                              <X className="size-3" />
+                            </button>
+                          )
+                        }
                       />
-                      {maquina.equipos.length > 1 && (
-                        <Button
-                          isIconOnly
-                          size="sm"
-                          color="danger"
-                          variant="light"
-                          onPress={() => removeEquipo(maquina.id, equipo.id)}
-                        >
-                          <Trash2 className="size-3" />
-                        </Button>
-                      )}
                     </div>
                   ))}
                 </div>
               </div>
-            </CardBody>
-          </Card>
-        ))}
-      </div>
+              {maquinas.length > 1 && maquinaIndex < maquinas.length - 1 && (
+                <Divider />
+              )}
+            </section>
+          ))}
+        </section>
+      </section>
 
       {/* Action Buttons */}
-      <div className="flex justify-end gap-3">
-        <Button variant="flat" size="lg" className="font-medium">
+      <section className="flex flex-row justify-end gap-4">
+        <Button radius="sm" variant="light">
           Cancelar
         </Button>
-        <Button
-          color="primary"
-          size="lg"
-          className="font-medium"
-        >
+        <Button radius="sm" color="primary">
           Crear cliente
         </Button>
-      </div>
+      </section>
     </main>
   );
 };
