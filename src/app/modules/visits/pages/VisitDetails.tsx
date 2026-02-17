@@ -1,23 +1,5 @@
-import {
-  Button,
-  Card,
-  CardBody,
-  CardHeader,
-  Chip,
-  Divider,
-} from "@heroui/react";
-import {
-  ChevronLeft,
-  User,
-  Calendar,
-  Clock,
-  Building2,
-  AlertCircle,
-  CheckCircle2,
-  ClipboardList,
-  Wrench,
-} from "lucide-react";
-import { useParams, useNavigate } from "react-router";
+import { Chip, Divider } from "@heroui/react";
+import { useParams, Link } from "react-router";
 
 // Type definitions
 interface PreventiveActivity {
@@ -171,336 +153,267 @@ const isAdditional = (visit: VisitData): visit is AdditionalVisit =>
 
 export const VisitDetails = () => {
   const { visitId } = useParams();
-  const navigate = useNavigate();
 
   const visitData = mockVisitData[parseInt(visitId || "0", 10)];
 
   if (!visitData) {
     return (
-      <main className="flex flex-col gap-4 w-full">
-        <div className="flex items-center gap-2">
-          <Button
-            isIconOnly
-            variant="light"
-            onPress={() => navigate("/visits")}
-          >
-            <ChevronLeft className="size-5" />
-          </Button>
-          <h1 className="text-xl font-semibold">Visita no encontrada</h1>
-        </div>
+      <main className="flex flex-col gap-8 pb-8 w-full">
+        <article className="flex flex-col items-start gap-4">
+          <Link to="/visits" className="text-xs border-b">
+            Volver
+          </Link>
+          <h1 className="text-xl font-bold text-foreground">
+            Visita no encontrada
+          </h1>
+        </article>
       </main>
     );
   }
 
   return (
-    <main className="flex flex-col gap-6 pb-8">
+    <main className="flex flex-col gap-8 pb-8">
       {/* Header Section */}
-      <article className="flex flex-row gap-3 items-center">
-        <Button
-          isIconOnly
-          variant="light"
-          size="lg"
-          className="hover:bg-default-100"
-          onPress={() => navigate("/visits")}
-        >
-          <ChevronLeft className="size-6" />
-        </Button>
-        <div className="flex-1">
+      <article className="flex flex-col items-start gap-4">
+        <Link to="/visits" className="text-xs border-b">
+          Volver
+        </Link>
+        <div>
           <div className="flex items-center gap-3 flex-wrap">
-            <h1 className="text-2xl font-bold text-foreground">
+            <h1 className="text-xl font-bold text-foreground">
               {visitData.orderNumber}
             </h1>
             <Chip
               color={getStatusColor(visitData.status) as any}
               variant="flat"
-              size="lg"
+              size="sm"
             >
               {visitData.status}
             </Chip>
-            <Chip variant="flat" size="lg">
-              {visitData.visitType}
-            </Chip>
           </div>
           <p className="text-sm text-default-500 mt-1">
-            Cliente: {visitData.client} - Máquina: {visitData.machine}
+            Cliente: {visitData.client} · Máquina: {visitData.machine}
           </p>
         </div>
       </article>
 
-      {/* Visit Summary Card */}
-      <Card className="shadow-sm border-1 border-default-200 p-4">
-        <CardHeader>
-          <h2 className="text-lg font-semibold text-foreground">
-            Resumen de la visita
-          </h2>
-        </CardHeader>
-        <CardBody className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
-          <div className="flex flex-col gap-2">
-            <div className="flex items-center gap-2 text-default-500">
-              <User className="size-4" />
-              <span className="text-sm font-medium">Responsable</span>
-            </div>
-            <p className="text-base font-semibold text-foreground">
-              {visitData.responsible}
+      {/* Visit summary */}
+      <section className="space-y-4">
+        <h2 className="font-semibold text-foreground">Resumen de la visita</h2>
+        <section className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          <div className="flex flex-col gap-1">
+            <span className="text-xs text-default-500 uppercase tracking-wide">
+              Cliente
+            </span>
+            <p className="text-sm font-medium text-foreground">
+              {visitData.client}
             </p>
           </div>
 
-          <div className="flex flex-col gap-2">
-            <div className="flex items-center gap-2 text-default-500">
-              <Building2 className="size-4" />
-              <span className="text-sm font-medium">Máquina</span>
-            </div>
-            <p className="text-base font-semibold text-foreground">
+          <div className="flex flex-col gap-1">
+            <span className="text-xs text-default-500 uppercase tracking-wide">
+              Máquina
+            </span>
+            <p className="text-sm font-medium text-foreground">
               {visitData.machine}
             </p>
           </div>
 
-          <div className="flex flex-col gap-2">
-            <div className="flex items-center gap-2 text-default-500">
-              <Calendar className="size-4" />
-              <span className="text-sm font-medium">Fecha</span>
-            </div>
-            <p className="text-base font-semibold text-foreground">
+          <div className="flex flex-col gap-1">
+            <span className="text-xs text-default-500 uppercase tracking-wide">
+              Responsable
+            </span>
+            <p className="text-sm font-medium text-foreground">
+              {visitData.responsible}
+            </p>
+          </div>
+
+          <div className="flex flex-col gap-1">
+            <span className="text-xs text-default-500 uppercase tracking-wide">
+              Tipo de visita
+            </span>
+            <p className="text-sm font-medium text-foreground">
+              {visitData.visitType}
+            </p>
+          </div>
+
+          <div className="flex flex-col gap-1">
+            <span className="text-xs text-default-500 uppercase tracking-wide">
+              Fecha
+            </span>
+            <p className="text-sm font-medium text-foreground">
               {visitData.date}
             </p>
           </div>
 
-          <div className="flex flex-col gap-2">
-            <div className="flex items-center gap-2 text-default-500">
-              <Clock className="size-4" />
-              <span className="text-sm font-medium">Duración</span>
-            </div>
-            <p className="text-base font-semibold text-foreground">
+          <div className="flex flex-col gap-1">
+            <span className="text-xs text-default-500 uppercase tracking-wide">
+              Duración
+            </span>
+            <p className="text-sm font-medium text-foreground">
               {visitData.duration}
             </p>
           </div>
 
-          <div className="flex flex-col gap-2">
-            <div className="flex items-center gap-2 text-default-500">
-              <CheckCircle2 className="size-4" />
-              <span className="text-sm font-medium">Estado de contrato</span>
-            </div>
-            <Chip
-              color={getContractStatusColor(visitData.contractStatus) as any}
-              variant="flat"
-              size="sm"
-            >
-              {visitData.contractStatus}
-            </Chip>
-          </div>
-        </CardBody>
-      </Card>
-
-      {/* Conditional Content Based on Visit Type */}
-      {isEmergency(visitData) && (
-        <Card className="shadow-sm border-1 border-default-200 p-4">
-          <CardHeader>
+          <div className="flex flex-col gap-1">
+            <span className="text-xs text-default-500 uppercase tracking-wide">
+              Estado de contrato
+            </span>
             <div className="flex items-center gap-2">
-              <AlertCircle className="size-5 text-danger" />
-              <h2 className="text-lg font-semibold text-foreground">
-                Emergencia: Diagnóstico
-              </h2>
+              <Chip
+                color={getContractStatusColor(visitData.contractStatus) as any}
+                variant="flat"
+                size="sm"
+              >
+                {visitData.contractStatus}
+              </Chip>
             </div>
-          </CardHeader>
-          <CardBody className="flex flex-col gap-5">
-            {/* Initial Problem */}
-            <div className="flex flex-col gap-3">
-              <div className="flex items-center gap-2">
-                <AlertCircle className="size-5 text-danger" />
-                <h3 className="text-base font-semibold text-foreground">
-                  Problema inicial
-                </h3>
-              </div>
-              <div className="pl-7">
-                <p className="text-sm text-default-700 leading-relaxed">
-                  {visitData.emergency.initialProblem}
-                </p>
-              </div>
-            </div>
+          </div>
+        </section>
+      </section>
 
+      
+      <Divider />
+      
+
+      {/* Contenido según tipo de visita */}
+      {isEmergency(visitData) && (
+        <section className="space-y-4">
+          <h2 className="font-semibold text-foreground">
+            Detalles de la emergencia
+          </h2>
+          <section className="space-y-3">
+            <div className="flex flex-col gap-1">
+              <h3 className="text-sm font-semibold text-foreground">
+                Problema inicial
+              </h3>
+              <p className="text-sm text-default-700 leading-relaxed">
+                {visitData.emergency.initialProblem}
+              </p>
+            </div>
             <Divider />
-
-            {/* Previous Activities */}
-            <div className="flex flex-col gap-3">
-              <div className="flex items-center gap-2">
-                <Wrench className="size-5 text-warning" />
-                <h3 className="text-base font-semibold text-foreground">
-                  Actividades previas (sin solución)
-                </h3>
-              </div>
-              <div className="pl-7">
-                <p className="text-sm text-default-700 leading-relaxed">
-                  {visitData.emergency.previousActivities}
-                </p>
-              </div>
+            <div className="flex flex-col gap-1">
+              <h3 className="text-sm font-semibold text-foreground">
+                Actividades previas (sin solución)
+              </h3>
+              <p className="text-sm text-default-700 leading-relaxed">
+                {visitData.emergency.previousActivities}
+              </p>
             </div>
-          </CardBody>
-        </Card>
+          </section>
+        </section>
       )}
 
       {isAdditional(visitData) && visitData.contractStatus === "No activo" && (
-        <Card className="shadow-sm border-1 border-default-200 p-4">
-          <CardHeader>
-            <div className="flex items-center gap-2">
-              <ClipboardList className="size-5 text-primary" />
-              <h2 className="text-lg font-semibold text-foreground">
-                Checklist solicitado por el cliente
-              </h2>
-            </div>
-          </CardHeader>
-          <CardBody className="flex flex-col gap-3">
-            {visitData.customChecklist.map((item: ChecklistItem, index: number) => (
-              <div
-                key={index}
-                className="flex items-center gap-3 p-3 rounded-lg bg-content1 border border-default-200"
-              >
+        <section className="space-y-4">
+          <h2 className="font-semibold text-foreground">
+            Checklist solicitado por el cliente
+          </h2>
+          <section className="flex flex-col gap-3">
+            {visitData.customChecklist.map(
+              (item: ChecklistItem, index: number) => (
                 <div
-                  className={`size-5 rounded-full flex items-center justify-center ${
-                    item.completed ? "bg-success text-white" : "bg-default-200"
-                  }`}
+                  key={index}
+                  className="flex items-center gap-3 p-3 rounded bg-content1"
                 >
-                  {item.completed && <CheckCircle2 className="size-3" />}
+                  <span
+                    className={`text-sm flex-1 ${
+                      item.completed
+                        ? "text-default-500 line-through"
+                        : "text-foreground font-medium"
+                    }`}
+                  >
+                    {item.task}
+                  </span>
                 </div>
-                <span
-                  className={`text-sm font-medium flex-1 ${
-                    item.completed
-                      ? "text-default-500 line-through"
-                      : "text-foreground"
-                  }`}
-                >
-                  {item.task}
-                </span>
-              </div>
-            ))}
-          </CardBody>
-        </Card>
+              ),
+            )}
+          </section>
+        </section>
       )}
 
       {isPreventive(visitData) && (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Preventive Activities */}
-          <Card className="shadow-sm border-1 border-default-200 p-4">
-            <CardHeader>
-              <div className="flex items-center justify-between w-full">
-                <div className="flex items-center gap-2">
-                  <Wrench className="size-5 text-success" />
-                  <h2 className="text-lg font-semibold text-foreground">
-                    Actividades preventivas
-                  </h2>
-                </div>
-                <Chip size="sm" variant="flat">
-                  {visitData.preventiveActivities.length}
-                </Chip>
-              </div>
-            </CardHeader>
-            <CardBody className="flex flex-col gap-3">
-              {visitData.preventiveActivities.map((activity: PreventiveActivity, index: number) => (
-                <div
-                  key={index}
-                  className="flex items-center gap-3 p-3 rounded-lg bg-content1 border border-default-200"
-                >
+        <section className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Actividades preventivas */}
+          <section className="space-y-3">
+            <div className="flex items-center justify-between gap-2">
+              <h2 className="font-semibold text-foreground">
+                Actividades preventivas
+              </h2>
+              <Chip size="sm" variant="flat">
+                {visitData.preventiveActivities.length}
+              </Chip>
+            </div>
+            <div className="flex flex-col gap-3">
+              {visitData.preventiveActivities.map(
+                (activity: PreventiveActivity, index: number) => (
                   <div
-                    className={`size-5 rounded-full flex items-center justify-center ${
-                      activity.completed
-                        ? "bg-success text-white"
-                        : "bg-default-200"
-                    }`}
-                    >
-                      {activity.completed && <CheckCircle2 className="size-3" />}
-                    </div>
+                    key={index}
+                    className="flex items-center gap-3 p-3 rounded bg-content1"
+                  >
                     <span
-                      className={`text-sm font-medium flex-1 ${
+                      className={`text-sm flex-1 ${
                         activity.completed
                           ? "text-default-500 line-through"
-                          : "text-foreground"
+                          : "text-foreground font-medium"
                       }`}
                     >
                       {activity.name}
                     </span>
                   </div>
-                ))}
-              </CardBody>
-            </Card>
+                ),
+              )}
+            </div>
+          </section>
 
-          {/* Pending Activities */}
-          <Card className="shadow-sm border-1 border-default-200 p-4">
-            <CardHeader>
-              <div className="flex items-center justify-between w-full">
-                <div className="flex items-center gap-2">
-                  <Clock className="size-5 text-warning" />
-                  <h2 className="text-lg font-semibold text-foreground">
-                    Actividades pendientes
-                  </h2>
-                </div>
-                <Chip size="sm" variant="flat" color="warning">
-                  {visitData.pendingActivities.length}
-                  </Chip>
-                </div>
-              </CardHeader>
-              <CardBody className="flex flex-col gap-3">
-                {visitData.pendingActivities.map((activity: PendingActivity, index: number) => (
+          {/* Actividades pendientes */}
+          <section className="space-y-3">
+            <div className="flex items-center justify-between gap-2">
+              <h2 className="font-semibold text-foreground">
+                Actividades pendientes
+              </h2>
+              <Chip size="sm" variant="flat" color="warning">
+                {visitData.pendingActivities.length}
+              </Chip>
+            </div>
+            <div className="flex flex-col gap-3">
+              {visitData.pendingActivities.map(
+                (activity: PendingActivity, index: number) => (
                   <div
                     key={index}
-                    className="flex items-start gap-3 p-3 rounded-lg bg-content1 border border-default-200"
+                    className="flex flex-col gap-1 p-3 rounded bg-content1"
                   >
-                    <div
-                      className={`size-5 rounded-full flex items-center justify-center mt-0.5 ${
+                    <span
+                      className={`text-sm ${
                         activity.completed
-                          ? "bg-success text-white"
-                          : "bg-warning-100 text-warning"
+                          ? "text-default-500 line-through"
+                          : "text-foreground font-medium"
                       }`}
                     >
-                      {activity.completed && <CheckCircle2 className="size-3" />}
-                    </div>
-                    <div className="flex flex-col gap-1 flex-1">
-                      <span
-                        className={`text-sm font-medium ${
-                          activity.completed
-                            ? "text-default-500 line-through"
-                            : "text-foreground"
-                        }`}
-                      >
-                        {activity.name}
-                      </span>
-                      <span className="text-xs text-default-400">
-                        Reportado el: {activity.reportedDate}
-                      </span>
-                    </div>
+                      {activity.name}
+                    </span>
+                    <span className="text-xs text-default-400">
+                      Reportado el: {activity.reportedDate}
+                    </span>
                   </div>
-                ))}
-              </CardBody>
-            </Card>
-        </div>
-      )}
-
-      {/* Notes Card */}
-      {visitData.notes && (
-        <Card className="shadow-sm border-1 border-default-200 p-4">
-          <CardHeader>
-            <div className="flex items-center gap-2">
-              <ClipboardList className="size-5 text-primary" />
-              <h2 className="text-lg font-semibold text-foreground">
-                Notas adicionales
-              </h2>
+                ),
+              )}
             </div>
-          </CardHeader>
-          <CardBody>
-            <p className="text-sm text-default-700 leading-relaxed">
-              {visitData.notes}
-            </p>
-          </CardBody>
-        </Card>
+          </section>
+        </section>
       )}
 
-      {/* Action Buttons */}
-      {/* <div className="flex justify-end gap-4">
-        <Button variant="flat" size="lg">
-          Editar
-        </Button>
-        <Button color="primary" variant="flat" size="lg">
-          Generar reporte
-        </Button>
-      </div> */}
+      <Divider />
+
+      {/* Notas adicionales */}
+      {visitData.notes && (
+        <section className="space-y-3">
+          <h2 className="font-semibold text-foreground">Notas adicionales</h2>
+          <p className="text-sm text-default-700 leading-relaxed">
+            {visitData.notes}
+          </p>
+        </section>
+      )}
     </main>
   );
 };

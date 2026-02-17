@@ -1,9 +1,7 @@
 import {
   Button,
-  Card,
-  CardBody,
-  CardHeader,
   Chip,
+  Divider,
   Table,
   TableBody,
   TableCell,
@@ -11,17 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from "@heroui/react";
-import {
-  ChevronLeft,
-  Calendar,
-  Building2,
-  Gift,
-  History,
-  Wrench,
-  PhoneCall,
-  CheckCircle2,
-} from "lucide-react";
-import { useParams, useNavigate } from "react-router";
+import { Link, useParams } from "react-router";
 
 // Type definitions
 interface ContractBenefit {
@@ -56,9 +44,11 @@ interface ContractDetail {
   contractNumber: string;
   client: string;
   machine: string;
+  equipment: string;
   startDate: string;
   endDate: string;
-  duration: string;
+  visitDays: number;
+  emergencyVisitDays: number;
   status: "Activo" | "Por Vencer" | "Expirado";
   amount: string;
   benefits: ContractBenefit[];
@@ -73,9 +63,11 @@ const mockContractData: Record<number, ContractDetail> = {
     contractNumber: "CNT-2024-001",
     client: "Empresa A",
     machine: "MP1 Cali",
+    equipment: "Motor Principal",
     startDate: "2024-01-15",
     endDate: "2025-01-15",
-    duration: "12 meses",
+    visitDays: 12,
+    emergencyVisitDays: 2,
     status: "Activo",
     amount: "$50,000",
     benefits: [
@@ -155,9 +147,11 @@ const mockContractData: Record<number, ContractDetail> = {
     contractNumber: "CNT-2024-002",
     client: "Empresa B",
     machine: "MP1 Bogotá",
+    equipment: "Compresor",
     startDate: "2024-03-20",
     endDate: "2024-12-20",
-    duration: "9 meses",
+    visitDays: 8,
+    emergencyVisitDays: 1,
     status: "Activo",
     amount: "$35,000",
     benefits: [
@@ -216,9 +210,11 @@ const mockContractData: Record<number, ContractDetail> = {
     contractNumber: "CNT-2024-004",
     client: "Empresa D",
     machine: "MP5 Quindío",
+    equipment: "Sistema Eléctrico",
     startDate: "2024-05-10",
     endDate: "2025-05-10",
-    duration: "12 meses",
+    visitDays: 10,
+    emergencyVisitDays: 2,
     status: "Activo",
     amount: "$45,000",
     benefits: [
@@ -268,9 +264,11 @@ const mockContractData: Record<number, ContractDetail> = {
     contractNumber: "CNT-2024-009",
     client: "Empresa D",
     machine: "MP5 Quindío",
+    equipment: "Diagnóstico de vibraciones",
     startDate: "2024-06-10",
     endDate: "2026-06-10",
-    duration: "24 meses",
+    visitDays: 15,
+    emergencyVisitDays: 3,
     status: "Activo",
     amount: "$50,000",
     benefits: [
@@ -360,274 +358,288 @@ const getStatusColor = (status: string) => {
   }
 };
 
-const getBenefitStatusColor = (status: string) => {
-  return status === "Activo" ? "success" : "warning";
-};
-
 export const ContractDetails = () => {
   const { contractId } = useParams();
-  const navigate = useNavigate();
 
   const contractData = mockContractData[parseInt(contractId || "0", 10)];
 
   if (!contractData) {
     return (
-      <main className="flex flex-col gap-4 w-full">
-        <div className="flex items-center gap-2">
-          <Button
-            isIconOnly
-            variant="light"
-            onPress={() => navigate("/contracts")}
-          >
-            <ChevronLeft className="size-5" />
-          </Button>
-          <h1 className="text-xl font-semibold">Contrato no encontrado</h1>
-        </div>
+      <main className="flex flex-col gap-8 w-full">
+        <article className="flex flex-col items-start gap-4">
+          <Link to="/contracts" className="text-xs border-b">
+            Volver
+          </Link>
+          <h1 className="text-xl font-bold text-foreground">
+            Contrato no encontrado
+          </h1>
+        </article>
       </main>
     );
   }
 
   return (
-    <main className="flex flex-col gap-6 pb-8">
+    <main className="flex flex-col gap-8">
       {/* Header Section */}
-      <article className="flex flex-row gap-3 items-center">
-        <Button
-          isIconOnly
-          variant="light"
-          size="lg"
-          className="hover:bg-default-100"
-          onPress={() => navigate("/contracts")}
-        >
-          <ChevronLeft className="size-6" />
-        </Button>
-        <div className="flex-1">
+      <article className="flex flex-col items-start gap-4">
+        <Link to="/contracts" className="text-xs border-b">
+          Volver
+        </Link>
+        <div>
           <div className="flex items-center gap-3 flex-wrap">
-            <h1 className="text-2xl font-bold text-foreground">
+            <h1 className="text-xl font-bold text-foreground">
               {contractData.contractNumber}
             </h1>
             <Chip
               color={getStatusColor(contractData.status) as any}
               variant="flat"
-              size="lg"
+              size="sm"
             >
               {contractData.status}
             </Chip>
           </div>
           <p className="text-sm text-default-500 mt-1">
-            Cliente: {contractData.client} - Máquina: {contractData.machine}
+            Cliente: {contractData.client} · Máquina: {contractData.machine}
           </p>
         </div>
       </article>
 
-      {/* Contract Summary Card */}
-      <Card className="shadow-sm border-1 border-default-200 p-4">
-        <CardHeader>
-          <h2 className="text-lg font-semibold text-foreground">
-            Resumen del contrato
-          </h2>
-        </CardHeader>
-        <CardBody className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
-          <div className="flex flex-col gap-2">
-            <div className="flex items-center gap-2 text-default-500">
-              <Calendar className="size-4" />
-              <span className="text-sm font-medium">Vigencia</span>
-            </div>
-            <p className="text-base font-semibold text-foreground">
-              {contractData.duration}
-            </p>
-            <p className="text-xs text-default-400">
-              {contractData.startDate} a {contractData.endDate}
-            </p>
-          </div>
-
-          <div className="flex flex-col gap-2">
-            <div className="flex items-center gap-2 text-default-500">
-              <Building2 className="size-4" />
-              <span className="text-sm font-medium">Cliente</span>
-            </div>
-            <p className="text-base font-semibold text-foreground">
+      {/* Contract summary */}
+      <section className="space-y-4">
+        <h2 className="font-semibold text-foreground">Resumen del contrato</h2>
+        <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+          <div className="flex flex-col gap-1">
+            <span className="text-xs text-default-500 uppercase tracking-wide">
+              Cliente
+            </span>
+            <p className="text-sm font-medium text-foreground">
               {contractData.client}
             </p>
           </div>
 
-          <div className="flex flex-col gap-2">
-            <div className="flex items-center gap-2 text-default-500">
-              <Wrench className="size-4" />
-              <span className="text-sm font-medium">Máquina</span>
-            </div>
-            <p className="text-base font-semibold text-foreground">
+          <div className="flex flex-col gap-1">
+            <span className="text-xs text-default-500 uppercase tracking-wide">
+              Máquina
+            </span>
+            <p className="text-sm font-medium text-foreground">
               {contractData.machine}
             </p>
           </div>
 
-          <div className="flex flex-col gap-2">
-            <div className="flex items-center gap-2 text-default-500">
-              <Gift className="size-4" />
-              <span className="text-sm font-medium">Valor del contrato</span>
-            </div>
-            <p className="text-base font-semibold text-foreground">
-              {contractData.amount}
+          <div className="flex flex-col gap-1">
+            <span className="text-xs text-default-500 uppercase tracking-wide">
+              Equipo
+            </span>
+            <p className="text-sm font-medium text-foreground">
+              {contractData.equipment}
             </p>
           </div>
-        </CardBody>
-      </Card>
 
-      {/* Benefits Card */}
-      <Card className="shadow-sm border-1 border-default-200 p-4">
-        <CardHeader>
-          <div className="flex items-center justify-between w-full">
-            <div className="flex items-center gap-2">
-              <Gift className="size-5 text-success" />
-              <h2 className="text-lg font-semibold text-foreground">
-                Beneficios incluidos
-              </h2>
-            </div>
-            <Chip size="sm" variant="flat">
-              {contractData.benefits.length}
-            </Chip>
-          </div>
-        </CardHeader>
-        <CardBody className="grid grid-cols-1 md:grid-cols-2 gap-3">
-          {contractData.benefits.map((benefit, index) => (
-            <div
-              key={index}
-              className="flex items-center justify-between p-3 rounded-lg bg-content1 border border-default-200"
-            >
-              <div className="flex items-center gap-3 flex-1">
-                <CheckCircle2 className="size-5 text-success shrink-0" />
-                <span className="text-sm font-medium text-foreground">
-                  {benefit.name}
-                </span>
-              </div>
-              <Chip
-                color={getBenefitStatusColor(benefit.status) as any}
-                variant="flat"
-                size="sm"
-              >
-                {benefit.status}
-              </Chip>
-            </div>
-          ))}
-        </CardBody>
-      </Card>
-
-      {/* Visits History Table */}
-      <Card className="shadow-sm border-1 border-default-200 p-4">
-        <CardHeader>
-          <div className="flex items-center gap-2">
-            <History className="size-5 text-primary" />
-            <h2 className="text-lg font-semibold text-foreground">
-              Historial de visitas
-            </h2>
-          </div>
-        </CardHeader>
-        <CardBody>
-          {contractData.visits.length > 0 ? (
-            <Table aria-label="Historial de visitas">
-              <TableHeader>
-                <TableColumn>OT</TableColumn>
-                <TableColumn>Máquina</TableColumn>
-                <TableColumn>Fecha</TableColumn>
-                <TableColumn>Responsable</TableColumn>
-                <TableColumn>Tipo</TableColumn>
-                <TableColumn>Duración</TableColumn>
-                <TableColumn>Estado</TableColumn>
-              </TableHeader>
-              <TableBody>
-                {contractData.visits.map((visit) => (
-                  <TableRow key={visit.id}>
-                    <TableCell className="font-semibold text-foreground">
-                      {visit.orderNumber}
-                    </TableCell>
-                    <TableCell>{visit.machine}</TableCell>
-                    <TableCell>{visit.date}</TableCell>
-                    <TableCell>{visit.responsible}</TableCell>
-                    <TableCell>{visit.type}</TableCell>
-                    <TableCell>{visit.duration}</TableCell>
-                    <TableCell>
-                      <Chip
-                        color={getStatusColor(visit.status) as any}
-                        variant="flat"
-                        size="sm"
-                      >
-                        {visit.status}
-                      </Chip>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          ) : (
-            <p className="text-sm text-default-500">
-              No hay visitas registradas para este contrato.
+          <div className="flex flex-col gap-1">
+            <span className="text-xs text-default-500 uppercase tracking-wide">
+              Fecha de inicio
+            </span>
+            <p className="text-sm font-medium text-foreground">
+              {contractData.startDate}
             </p>
-          )}
-        </CardBody>
-      </Card>
-
-      {/* Remote Support History Table */}
-      <Card className="shadow-sm border-1 border-default-200 p-4">
-        <CardHeader>
-          <div className="flex items-center gap-2">
-            <PhoneCall className="size-5 text-warning" />
-            <h2 className="text-lg font-semibold text-foreground">
-              Historial de atenciones remotas
-            </h2>
           </div>
-        </CardHeader>
-        <CardBody>
-          {contractData.remoteSessions.length > 0 ? (
-            <Table aria-label="Historial de atenciones remotas">
-              <TableHeader>
-                <TableColumn>Ticket</TableColumn>
-                <TableColumn>Máquina</TableColumn>
-                <TableColumn>Fecha</TableColumn>
-                <TableColumn>Técnico</TableColumn>
-                <TableColumn>Tipo de asunto</TableColumn>
-                <TableColumn>Duración</TableColumn>
-                <TableColumn>Estado</TableColumn>
-              </TableHeader>
-              <TableBody>
-                {contractData.remoteSessions.map((session) => (
-                  <TableRow key={session.id}>
-                    <TableCell className="font-semibold text-foreground">
-                      {session.ticket}
-                    </TableCell>
-                    <TableCell>{session.machine}</TableCell>
-                    <TableCell>{session.date}</TableCell>
-                    <TableCell>{session.technician}</TableCell>
-                    <TableCell>{session.issueType}</TableCell>
-                    <TableCell>{session.duration}</TableCell>
-                    <TableCell>
-                      <Chip
-                        color={getStatusColor(session.status) as any}
-                        variant="flat"
-                        size="sm"
-                      >
-                        {session.status}
-                      </Chip>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          ) : (
-            <p className="text-sm text-default-500">
-              No hay atenciones remotas registradas para este contrato.
+
+          <div className="flex flex-col gap-1">
+            <span className="text-xs text-default-500 uppercase tracking-wide">
+              Fecha de fin
+            </span>
+            <p className="text-sm font-medium text-foreground">
+              {contractData.endDate}
             </p>
-          )}
-        </CardBody>
-      </Card>
+          </div>
+
+          <div className="flex flex-col gap-1">
+            <span className="text-xs text-default-500 uppercase tracking-wide">
+              Días de visitas
+            </span>
+            <p className="text-sm font-medium text-foreground">
+              {contractData.visitDays}
+            </p>
+          </div>
+
+          <div className="flex flex-col gap-1">
+            <span className="text-xs text-default-500 uppercase tracking-wide">
+              Días de visitas de emergencia
+            </span>
+            <p className="text-sm font-medium text-foreground">
+              {contractData.emergencyVisitDays}
+            </p>
+          </div>
+        </section>
+      </section>
+
+      <Divider />
+
+      {/* Contract current state */}
+      <section className="space-y-4">
+        <h2 className="font-semibold text-foreground">
+          Estado actual del contrato
+        </h2>
+        <section className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          <div className="flex flex-col gap-1">
+            <span className="text-xs text-default-500 uppercase tracking-wide">
+              Días restantes
+            </span>
+            <p className="text-sm font-medium text-foreground">
+              {Math.ceil(
+                (new Date(contractData.endDate).getTime() -
+                  new Date(contractData.startDate).getTime()) /
+                  (1000 * 60 * 60 * 24),
+              )}
+            </p>
+          </div>
+
+          <div className="flex flex-col gap-1">
+            <span className="text-xs text-default-500 uppercase tracking-wide">
+              Visitas restantes
+            </span>
+            <p className="text-sm font-medium text-foreground">
+              {contractData.visitDays - contractData.visits.length}
+            </p>
+          </div>
+
+          <div className="flex flex-col gap-1">
+            <span className="text-xs text-default-500 uppercase tracking-wide">
+              Visitas de emergencia restantes
+            </span>
+            <p className="text-sm font-medium text-foreground">
+              {contractData.emergencyVisitDays -
+                contractData.visits.filter(
+                  (visit) => visit.type === "Emergencia",
+                ).length}
+            </p>
+          </div>
+
+          <div className="flex flex-col gap-1">
+            <span className="text-xs text-default-500 uppercase tracking-wide">
+              Visitas asociadas al contrato
+            </span>
+            <p className="text-sm font-medium text-foreground">
+              {contractData.visits.length} visitas registradas
+            </p>
+          </div>
+
+          <div className="flex flex-col gap-1">
+            <span className="text-xs text-default-500 uppercase tracking-wide">
+              Atenciones remotas asociadas
+            </span>
+            <p className="text-sm font-medium text-foreground">
+              {contractData.remoteSessions.length} atenciones remotas
+            </p>
+          </div>
+        </section>
+      </section>
+
+      <Divider />
+
+      {/* Visits History */}
+      <section className="space-y-4">
+        <h2 className="font-semibold text-foreground">Historial de visitas</h2>
+        {contractData.visits.length > 0 ? (
+          <Table aria-label="Historial de visitas" removeWrapper>
+            <TableHeader>
+              <TableColumn>OT</TableColumn>
+              <TableColumn>Máquina</TableColumn>
+              <TableColumn>Fecha</TableColumn>
+              <TableColumn>Responsable</TableColumn>
+              <TableColumn>Tipo</TableColumn>
+              <TableColumn>Duración</TableColumn>
+              <TableColumn>Estado</TableColumn>
+            </TableHeader>
+            <TableBody>
+              {contractData.visits.map((visit) => (
+                <TableRow key={visit.id}>
+                  <TableCell className="font-semibold text-foreground">
+                    {visit.orderNumber}
+                  </TableCell>
+                  <TableCell>{visit.machine}</TableCell>
+                  <TableCell>{visit.date}</TableCell>
+                  <TableCell>{visit.responsible}</TableCell>
+                  <TableCell>{visit.type}</TableCell>
+                  <TableCell>{visit.duration}</TableCell>
+                  <TableCell>
+                    <Chip
+                      color={getStatusColor(visit.status) as any}
+                      variant="flat"
+                      size="sm"
+                    >
+                      {visit.status}
+                    </Chip>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        ) : (
+          <p className="text-sm text-default-500">
+            No hay visitas registradas para este contrato.
+          </p>
+        )}
+      </section>
+
+      <Divider />
+
+      {/* Remote Support History */}
+      <section className="space-y-4">
+        <h2 className="font-semibold text-foreground">
+          Historial de atenciones remotas
+        </h2>
+        {contractData.remoteSessions.length > 0 ? (
+          <Table aria-label="Historial de atenciones remotas" removeWrapper>
+            <TableHeader>
+              <TableColumn>Ticket</TableColumn>
+              <TableColumn>Máquina</TableColumn>
+              <TableColumn>Fecha</TableColumn>
+              <TableColumn>Técnico</TableColumn>
+              <TableColumn>Tipo de asunto</TableColumn>
+              <TableColumn>Duración</TableColumn>
+              <TableColumn>Estado</TableColumn>
+            </TableHeader>
+            <TableBody>
+              {contractData.remoteSessions.map((session) => (
+                <TableRow key={session.id}>
+                  <TableCell className="font-semibold text-foreground">
+                    {session.ticket}
+                  </TableCell>
+                  <TableCell>{session.machine}</TableCell>
+                  <TableCell>{session.date}</TableCell>
+                  <TableCell>{session.technician}</TableCell>
+                  <TableCell>{session.issueType}</TableCell>
+                  <TableCell>{session.duration}</TableCell>
+                  <TableCell>
+                    <Chip
+                      color={getStatusColor(session.status) as any}
+                      variant="flat"
+                      size="sm"
+                    >
+                      {session.status}
+                    </Chip>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        ) : (
+          <p className="text-sm text-default-500">
+            No hay atenciones remotas registradas para este contrato.
+          </p>
+        )}
+      </section>
 
       {/* Action Buttons */}
-      <div className="flex justify-end gap-4">
-        <Button variant="flat" size="lg">
+      <section className="flex justify-end gap-4">
+        <Button radius="sm" variant="light">
           Editar
         </Button>
-        <Button color="primary" variant="flat" size="lg">
+        <Button radius="sm" color="primary">
           Renovar contrato
         </Button>
-      </div>
+      </section>
     </main>
   );
 };

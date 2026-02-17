@@ -124,7 +124,7 @@ export const Contracts = () => {
               className="max-w-xs"
               radius="sm"
               isClearable
-              placeholder="Buscar contratos..."
+              placeholder="Buscar..."
               startContent={<Search className="size-4" />}
               onClear={() => {}}
             />

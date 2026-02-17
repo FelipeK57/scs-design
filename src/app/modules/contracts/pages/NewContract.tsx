@@ -94,7 +94,7 @@ export const NewContract = () => {
   };
 
   return (
-    <main className="flex flex-col gap-8 pb-8">
+    <main className="flex flex-col gap-8">
       <article className="flex flex-col items-start gap-4">
         <Link to="/contracts" className="text-xs border-b">
           Volver
